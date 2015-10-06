@@ -201,6 +201,15 @@
     }
   };
 
-  window.chromeTabs = chromeTabs;
+
+  if (typeof window.define === 'function' && window.define.amd) {
+    window.define(function () { return chromeTabs; });
+  }
+  else if (typeof module !== 'undefined' && typeof exports === 'object') {
+    module.exports = chromeTabs;
+  }
+  else {
+    window.chromeTabs = chromeTabs;
+  }
 
 }).call(this);
