@@ -1,0 +1,28 @@
+{
+  "name": "chrome-tabs",
+  "description": "Chrome-style tabs in standard HTML, CSS, and JavaScript.",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/devlinjd/chrome-tabs.git"
+  },
+  "keywords": [
+    "chrome",
+    "tabs",
+    "UI",
+    "widget",
+    "HTML",
+    "CSS",
+    "JavaScript"
+  ],
+  "author": "Adam Schwartz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/devlinjd/chrome-tabs/issues"
+  },
+  "main": "js/chrome-tabs.js",
+  "homepage": "https://github.com/devlinjd/chrome-tabs",
+  "dependencies": {
+    "jquery-ui": "~1.11.4"
+  }
+}
