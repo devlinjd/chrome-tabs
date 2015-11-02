@@ -155,7 +155,7 @@
       });
     },
     setupEvents: function($shell) {
-      if($shell.data.allowCreate) {
+      if($shell.data().allowCreate) {
         $shell.unbind('dblclick').bind('dblclick', function() {
           return chromeTabs.addNewTab($shell);
         });
