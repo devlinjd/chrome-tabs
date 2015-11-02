@@ -154,18 +154,22 @@
       });
     },
     setupEvents: function($shell) {
-      $shell.unbind('dblclick').bind('dblclick', function() {
-        return chromeTabs.addNewTab($shell);
-      });
+      if($shell.data.allowCreate) {
+        $shell.unbind('dblclick').bind('dblclick', function() {
+          return chromeTabs.addNewTab($shell);
+        });
+      }
       return $shell.find('.chrome-tab').each(function() {
         var $tab;
         $tab = $(this);
         $tab.unbind('click').click(function() {
           return chromeTabs.setCurrentTab($shell, $tab);
         });
-        return $tab.find('.chrome-tab-close').unbind('click').click(function() {
-          return chromeTabs.closeTab($shell, $tab);
-        });
+        if($shell.data.allowClose) {
+          return $tab.find('.chrome-tab-close').unbind('click').click(function() {
+            return chromeTabs.closeTab($shell, $tab);
+          });
+        }
       });
     },
     addNewTab: function($shell, newTabData) {
