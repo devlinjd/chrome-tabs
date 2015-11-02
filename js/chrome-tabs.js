@@ -148,6 +148,7 @@
         $tab.css({
           zIndex: zIndex
         });
+        if(!$shell.data().allowClose) $tab.find('.chrome-tab-close').hide();
         return $tab.data({
           zIndex: zIndex
         });
@@ -165,7 +166,7 @@
         $tab.unbind('click').click(function() {
           return chromeTabs.setCurrentTab($shell, $tab);
         });
-        if($shell.data.allowClose) {
+        if($shell.data().allowClose) {
           return $tab.find('.chrome-tab-close').unbind('click').click(function() {
             return chromeTabs.closeTab($shell, $tab);
           });
