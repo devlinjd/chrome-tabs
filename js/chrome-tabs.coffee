@@ -138,11 +138,15 @@ chromeTabs =
             zIndex = $tabs.length - i
             zIndex = $tabs.length + 40 if $tab.hasClass('chrome-tab-current')
             $tab.css zIndex: zIndex
+            if not $shell.data().allowClose
+                $tab.find('.chrome-tab-close').hide();
             $tab.data zIndex: zIndex
 
     setupEvents: ($shell) ->
-        $shell.unbind('dblclick').bind 'dblclick', ->
-            chromeTabs.addNewTab $shell
+
+        if $shell.data().allowCreate
+            $shell.unbind('dblclick').bind 'dblclick', ->
+                chromeTabs.addNewTab $shell
 
         $shell.find('.chrome-tab').each ->
             $tab = $ @
@@ -150,11 +154,14 @@ chromeTabs =
             $tab.unbind('click').click ->
                 chromeTabs.setCurrentTab $shell, $tab
 
-            $tab.find('.chrome-tab-close').unbind('click').click ->
-                chromeTabs.closeTab $shell, $tab
+            if $shell.data().allowClose
+                $tab.find('.chrome-tab-close').unbind('click').click ->
+                    if $shell.data().requestClose and $shell.data().requestClose( $tab )
+                        chromeTabs.closeTab $shell, $tab
 
     addNewTab: ($shell, newTabData) ->
         $newTab = $ tabTemplate
+        newTabData.id and $newTab.attr('id', newTabData.id);
         $shell.find('.chrome-tabs').append $newTab
         tabData = $.extend true, {}, defaultNewTabData, newTabData
         chromeTabs.updateTab $shell, $newTab, tabData
@@ -171,7 +178,8 @@ chromeTabs =
                 chromeTabs.setCurrentTab $shell, $tab.prev()
             else if $tab.next().length
                 chromeTabs.setCurrentTab $shell, $tab.next()
-        $tab.remove()
+        $tab.remove() # jQuery UI fires a 'remove' event here. See:
+                      # http://stackoverflow.com/a/18410186/4942583                
         chromeTabs.render $shell
 
     updateTab: ($shell, $tab, tabData) ->
@@ -180,3 +188,10 @@ chromeTabs =
         $tab.data().tabData = tabData
 
 window.chromeTabs = chromeTabs
+
+if typeof exports is 'object'
+    module.exports = chromeTabs
+else if typeof define is 'function' and define.amd
+    define([], factory)
+#else
+#    @MODULE_NAME = factory()
