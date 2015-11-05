@@ -168,6 +168,8 @@
         });
         if($shell.data().allowClose) {
           return $tab.find('.chrome-tab-close').unbind('click').click(function() {
+            if( $shell.data().requestClose && !$shell.data().requestClose( $tab ) )
+              return;
             return chromeTabs.closeTab($shell, $tab);
           });
         }
@@ -176,6 +178,7 @@
     addNewTab: function($shell, newTabData) {
       var $newTab, tabData;
       $newTab = $(tabTemplate);
+      newTabData.id && $newTab.attr('id', newTabData.id);
       $shell.find('.chrome-tabs').append($newTab);
       tabData = $.extend(true, {}, defaultNewTabData, newTabData);
       chromeTabs.updateTab($shell, $newTab, tabData);
@@ -194,6 +197,8 @@
           chromeTabs.setCurrentTab($shell, $tab.next());
         }
       }
+      // Note: The next line will cause a 'remove' event to be fired, courtesy
+      // of jQuery UI. See: http://stackoverflow.com/a/18410186/4942583
       $tab.remove();
       return chromeTabs.render($shell);
     },
