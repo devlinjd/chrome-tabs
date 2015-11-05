@@ -148,14 +148,16 @@
         $tab.css({
           zIndex: zIndex
         });
-        if(!$shell.data().allowClose) $tab.find('.chrome-tab-close').hide();
+        if (!$shell.data().allowClose) {
+          $tab.find('.chrome-tab-close').hide();
+        }
         return $tab.data({
           zIndex: zIndex
         });
       });
     },
     setupEvents: function($shell) {
-      if($shell.data().allowCreate) {
+      if ($shell.data().allowCreate) {
         $shell.unbind('dblclick').bind('dblclick', function() {
           return chromeTabs.addNewTab($shell);
         });
@@ -166,11 +168,11 @@
         $tab.unbind('click').click(function() {
           return chromeTabs.setCurrentTab($shell, $tab);
         });
-        if($shell.data().allowClose) {
+        if ($shell.data().allowClose) {
           return $tab.find('.chrome-tab-close').unbind('click').click(function() {
-            if( $shell.data().requestClose && !$shell.data().requestClose( $tab ) )
-              return;
-            return chromeTabs.closeTab($shell, $tab);
+            if ($shell.data().requestClose && $shell.data().requestClose($tab)) {
+              return chromeTabs.closeTab($shell, $tab);
+            }
           });
         }
       });
@@ -197,8 +199,6 @@
           chromeTabs.setCurrentTab($shell, $tab.next());
         }
       }
-      // Note: The next line will cause a 'remove' event to be fired, courtesy
-      // of jQuery UI. See: http://stackoverflow.com/a/18410186/4942583
       $tab.remove();
       return chromeTabs.render($shell);
     },
@@ -211,15 +211,12 @@
     }
   };
 
+  window.chromeTabs = chromeTabs;
 
-  if (typeof window.define === 'function' && window.define.amd) {
-    window.define(function () { return chromeTabs; });
-  }
-  else if (typeof module !== 'undefined' && typeof exports === 'object') {
+  if (typeof exports === 'object') {
     module.exports = chromeTabs;
-  }
-  else {
-    window.chromeTabs = chromeTabs;
+  } else if (typeof define === 'function' && define.amd) {
+    define([], factory);
   }
 
 }).call(this);
