@@ -39,7 +39,9 @@
       chromeTabs.fixTabSizes($shell);
       chromeTabs.fixZIndexes($shell);
       chromeTabs.setupEvents($shell);
-      chromeTabs.setupSortable($shell);
+      if ($shell.data().allowSort !== false) {
+        chromeTabs.setupSortable($shell);
+      }
       return $shell.trigger('chromeTabRender');
     },
     setupSortable: function($shell) {

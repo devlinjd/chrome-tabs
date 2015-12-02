@@ -47,7 +47,8 @@ chromeTabs =
         chromeTabs.fixTabSizes $shell
         chromeTabs.fixZIndexes $shell
         chromeTabs.setupEvents $shell
-        chromeTabs.setupSortable $shell
+        if $shell.data().allowSort isnt false
+          chromeTabs.setupSortable $shell
         $shell.trigger('chromeTabRender')
 
     setupSortable: ($shell) ->
@@ -179,7 +180,7 @@ chromeTabs =
             else if $tab.next().length
                 chromeTabs.setCurrentTab $shell, $tab.next()
         $tab.remove() # jQuery UI fires a 'remove' event here. See:
-                      # http://stackoverflow.com/a/18410186/4942583                
+                      # http://stackoverflow.com/a/18410186/4942583
         chromeTabs.render $shell
 
     updateTab: ($shell, $tab, tabData) ->
